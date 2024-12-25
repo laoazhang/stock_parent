@@ -5,6 +5,8 @@ import cn.laoazhang.stock.vo.req.LoginReqVo;
 import cn.laoazhang.stock.vo.resp.LoginRespVo;
 import cn.laoazhang.stock.vo.resp.R;
 
+import java.util.Map;
+
 /**
  * @author : laoazhang
  * @date : 2024/12/24 22:43
@@ -25,4 +27,10 @@ public interface UserService {
      * @return
      */
     R<LoginRespVo> login(LoginReqVo vo);
+
+    /**
+     * 登录校验码生成服务方法
+     * @return
+     */
+    R<Map> getCaptchaCode();
 }

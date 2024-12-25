@@ -8,6 +8,8 @@ import cn.laoazhang.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author : laoazhang
  * @date : 2024/12/24 22:50
@@ -40,5 +42,14 @@ public class UserController {
     public R<LoginRespVo> login(@RequestBody LoginReqVo vo) {
         R<LoginRespVo> r = userService.login(vo);
         return r;
+    }
+
+    /**
+     * 生成登录校验码的访问接口
+     * @return
+     */
+    @GetMapping("/captcha")
+    public R<Map> getCaptchaCode() {
+        return userService.getCaptchaCode();
     }
 }
