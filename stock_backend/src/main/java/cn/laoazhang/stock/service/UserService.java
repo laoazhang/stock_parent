@@ -1,6 +1,9 @@
 package cn.laoazhang.stock.service;
 
 import cn.laoazhang.stock.pojo.entity.SysUser;
+import cn.laoazhang.stock.vo.req.LoginReqVo;
+import cn.laoazhang.stock.vo.resp.LoginRespVo;
+import cn.laoazhang.stock.vo.resp.R;
 
 /**
  * @author : laoazhang
@@ -15,4 +18,11 @@ public interface UserService {
      * @return
      */
     SysUser getUserByUserName(String userName);
+
+    /**
+     * 用户登录功能实现
+     * @param vo
+     * @return
+     */
+    R<LoginRespVo> login(LoginReqVo vo);
 }

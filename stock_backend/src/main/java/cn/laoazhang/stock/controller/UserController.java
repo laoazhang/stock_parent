@@ -2,11 +2,11 @@ package cn.laoazhang.stock.controller;
 
 import cn.laoazhang.stock.pojo.entity.SysUser;
 import cn.laoazhang.stock.service.UserService;
+import cn.laoazhang.stock.vo.req.LoginReqVo;
+import cn.laoazhang.stock.vo.resp.LoginRespVo;
+import cn.laoazhang.stock.vo.resp.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : laoazhang
@@ -25,8 +25,20 @@ public class UserController {
      * @param userName
      * @return
      */
-    @GetMapping("/user/{userName}")
+    @GetMapping("/{userName}")
     public SysUser getUserService(@PathVariable("userName") String userName) {
         return userService.getUserByUserName(userName);
+    }
+
+    /**
+     * 用户登录功能实现
+     *
+     * @param vo
+     * @return
+     */
+    @PostMapping("/login")
+    public R<LoginRespVo> login(@RequestBody LoginReqVo vo) {
+        R<LoginRespVo> r = userService.login(vo);
+        return r;
     }
 }
