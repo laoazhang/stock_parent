@@ -1,6 +1,8 @@
 package cn.laoazhang.stock.config;
 
+import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.utils.IdWorker;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @date : 2024/12/25 10:25
  * @description : 定义公共配置类
  */
+@EnableConfigurationProperties(StockInfoConfig.class)
 @Configuration
 public class CommonConfig {
 
