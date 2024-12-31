@@ -1,7 +1,12 @@
 package cn.laoazhang.stock.mapper;
 
+import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.pojo.entity.StockBlockRtInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author laoazhang
@@ -24,4 +29,10 @@ public interface StockBlockRtInfoMapper {
 
     int updateByPrimaryKey(StockBlockRtInfo record);
 
+    /**
+     * 沪深两市板块分时行情数据查询，以交易时间和交易总金额降序查询，取前10条数据
+     * @param timePoint 指定时间点
+     * @return
+     */
+    List<StockBlockDomain> sectorAllLimit(@Param("timePoint") Date timePoint);
 }

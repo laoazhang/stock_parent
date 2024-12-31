@@ -1,6 +1,7 @@
 package cn.laoazhang.stock.service;
 
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
+import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.vo.resp.R;
 
 import java.util.List;
@@ -16,4 +17,11 @@ public interface StockService {
      * @return
      */
     R<List<InnerMarketDomain>> innerIndexAll();
+
+    /**
+     * 需求说明: 获取沪深两市板块最新数据，以交易总金额降序查询，取前10条数据
+     * @return
+     */
+    R<List<StockBlockDomain>> sectorAllLimit();
+
 }
