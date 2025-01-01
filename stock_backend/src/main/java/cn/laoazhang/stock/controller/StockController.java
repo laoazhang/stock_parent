@@ -3,12 +3,14 @@ package cn.laoazhang.stock.controller;
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.service.StockService;
+import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -44,5 +46,18 @@ public class StockController {
     @GetMapping("/sector/all")
     public R<List<StockBlockDomain>> sectorAll() {
         return stockService.sectorAllLimit();
+    }
+
+    /**
+     * 分页查询股票最新数据，并按照涨幅排序查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "分页查询股票最新数据，并按照涨幅排序查询",notes = "分页查询股票最新数据，并按照涨幅排序查询",response = R.class)
+    @GetMapping("/stock/all")
+    public R<PageResult> getStockPageInfo(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+                                          @RequestParam(name = "pageSize",required = false,defaultValue = "20")Integer pageSize) {
+        return stockService.getStockPageInfo(page, pageSize);
     }
 }

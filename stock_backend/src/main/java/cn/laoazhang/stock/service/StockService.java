@@ -2,6 +2,7 @@ package cn.laoazhang.stock.service;
 
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
+import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
 
 import java.util.List;
@@ -24,4 +25,11 @@ public interface StockService {
      */
     R<List<StockBlockDomain>> sectorAllLimit();
 
+    /**
+     * 分页查询股票最新数据，并按照涨幅排序查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    R<PageResult> getStockPageInfo(Integer page, Integer pageSize);
 }
