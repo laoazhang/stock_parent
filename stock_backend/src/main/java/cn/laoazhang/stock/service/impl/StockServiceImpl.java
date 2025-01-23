@@ -9,6 +9,7 @@ import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockBusiness;
+import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.utils.DateTimeUtil;
@@ -119,5 +120,24 @@ public class StockServiceImpl implements StockService {
         PageResult<StockUpdownDomain> pageResult = new PageResult<>(new PageInfo<>(infos));
         //5.封装响应数据
         return R.ok(pageResult);
+    }
+
+    /**
+     * 统计沪深两市个股最新交易数据，并按涨幅降序排序查询前4条数据
+     * @return
+     */
+    @Override
+    public R<List<StockUpdownDomain>> getNewestStockInfo() {
+        //获取股票最新交易时间点
+        Date lastDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+        //TODO mock数据,后续删除
+        lastDate = DateTime.parse("2021-12-30 09:32:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //1.调用mapper接口获取数据
+        List<StockUpdownDomain> infos = stockRtInfoMapper.getNewestStockInfo(lastDate);
+        //2.组装数据
+        if (CollectionUtils.isEmpty(infos)) {
+            return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
+        }
+        return R.ok(infos);
     }
 }

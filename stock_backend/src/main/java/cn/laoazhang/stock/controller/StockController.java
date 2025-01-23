@@ -2,6 +2,8 @@ package cn.laoazhang.stock.controller;
 
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
+import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
+import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
@@ -59,5 +61,15 @@ public class StockController {
     public R<PageResult> getStockPageInfo(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
                                           @RequestParam(name = "pageSize",required = false,defaultValue = "20")Integer pageSize) {
         return stockService.getStockPageInfo(page, pageSize);
+    }
+
+    /**
+     * 统计沪深两市个股最新交易数据，并按涨幅降序排序查询前4条数据
+     * @return
+     */
+    @ApiOperation(value = "统计沪深两市个股最新交易数据，并按涨幅降序排序查询前4条数据",notes = "查询沪深两市个股最新交易数据，并按照涨幅排序查询",response = R.class)
+    @GetMapping("/stock/increase")
+    public R<List<StockUpdownDomain>> getNewestStockInfo() {
+        return stockService.getNewestStockInfo();
     }
 }

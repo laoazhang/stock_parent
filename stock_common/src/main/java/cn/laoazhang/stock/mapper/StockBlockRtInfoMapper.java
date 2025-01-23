@@ -1,6 +1,7 @@
 package cn.laoazhang.stock.mapper;
 
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
+import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockBlockRtInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,5 @@ public interface StockBlockRtInfoMapper {
      * @return
      */
     List<StockBlockDomain> sectorAllLimit(@Param("timePoint") Date timePoint);
+
 }
