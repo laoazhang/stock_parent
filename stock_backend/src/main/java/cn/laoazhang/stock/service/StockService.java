@@ -8,6 +8,7 @@ import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : laoazhang
@@ -41,4 +42,9 @@ public interface StockService {
      */
     R<List<StockUpdownDomain>> getNewestStockInfo();
 
+    /**
+     * 统计最新交易日下股标每分种涨跌停的数量
+     * @return
+     */
+    R<Map> getStockUpdownCount();
 }

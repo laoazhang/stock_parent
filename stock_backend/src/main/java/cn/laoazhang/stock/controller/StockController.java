@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : laoazhang
@@ -71,5 +72,15 @@ public class StockController {
     @GetMapping("/stock/increase")
     public R<List<StockUpdownDomain>> getNewestStockInfo() {
         return stockService.getNewestStockInfo();
+    }
+
+    /**
+     * 统计最新交易日下股标每分种涨跌停的数量
+     * @return
+     */
+    @GetMapping("/stock/updown/count")
+    @ApiOperation(value = "统计涨跌停个数",notes = "统计涨跌停个数",response = R.class)
+    public R<Map> getStockUpdownCount() {
+        return stockService.getStockUpdownCount();
     }
 }

@@ -1,6 +1,5 @@
 package cn.laoazhang.stock.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.laoazhang.stock.mapper.StockBlockRtInfoMapper;
 import cn.laoazhang.stock.mapper.StockBusinessMapper;
 import cn.laoazhang.stock.mapper.StockMarketIndexInfoMapper;
@@ -8,8 +7,6 @@ import cn.laoazhang.stock.mapper.StockRtInfoMapper;
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
-import cn.laoazhang.stock.pojo.entity.StockBusiness;
-import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.utils.DateTimeUtil;
@@ -18,18 +15,16 @@ import cn.laoazhang.stock.vo.resp.R;
 import cn.laoazhang.stock.vo.resp.ResponseCode;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.License;
-import org.checkerframework.checker.units.qual.A;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : laoazhang
@@ -139,5 +134,35 @@ public class StockServiceImpl implements StockService {
             return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
         }
         return R.ok(infos);
+    }
+
+    /**
+     * 统计最新交易日下股票每分钟涨跌停的数量
+     * @return
+     */
+    @Override
+    public R<Map> getStockUpdownCount() {
+        //1.获取最新的交易时间范围 openTime  curTime
+        //1.1 获取最新股票交易时间点
+        DateTime curDateTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
+        Date curTime = curDateTime.toDate();
+        //TODO
+        curTime = DateTime.parse("2022-01-06 14:25:00",DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //1.2 获取最新交易时间对应的开盘时间
+        DateTime openDate = DateTimeUtil.getOpenDate(curDateTime);
+        Date openTime = openDate.toDate();
+        //TODO
+        openTime = DateTime.parse("2022-01-06 09:30:00",DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //2.查询涨停数据
+        //约定mapper中flag入参: 1-涨停 0-跌停
+        List<Map> upCounts = stockRtInfoMapper.getStockUpdownCount(openTime,curTime,1);
+        //3.查询跌停数据
+        List<Map> dwCounts = stockRtInfoMapper.getStockUpdownCount(openTime,curTime,0);
+        //4.组装数据
+        HashMap<String, List> mapInfo = new HashMap<>();
+        mapInfo.put("upList",upCounts);
+        mapInfo.put("downList",dwCounts);
+        //5.返回数据
+        return R.ok(mapInfo);
     }
 }
