@@ -83,4 +83,14 @@ public class StockController {
     public R<Map> getStockUpdownCount() {
         return stockService.getStockUpdownCount();
     }
+
+    /**
+     * 功能描述：统计国内A股大盘T日和T-1日成交量对比功能（成交量为沪市和深市成交量之和）
+     * @return
+     */
+    @GetMapping("/stock/tradeAmt")
+    @ApiOperation(value = "统计国内A股大盘T日和T-1日成交量对比功能",notes = "（成交量为沪市和深市成交量之和）",response = R.class)
+    public R<Map> stockTradeVol4InnerMarket() {
+        return stockService.stockTradeVol4InnerMarket();
+    }
 }
