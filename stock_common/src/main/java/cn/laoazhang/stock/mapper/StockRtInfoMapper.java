@@ -2,6 +2,8 @@ package cn.laoazhang.stock.mapper;
 
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.Map;
 * @createDate 2024-12-24 22:24:22
 * @Entity cn.laoazhang.stock.pojo.entity.StockRtInfo
 */
+@SuppressWarnings("MybatisXMapperMethodInspection")
 public interface StockRtInfoMapper {
 
     int deleteByPrimaryKey(Long id);
@@ -43,4 +46,11 @@ public interface StockRtInfoMapper {
      * @return
      */
     List<Map> getStockUpdownCount(@Param("openTime") Date openTime, @Param("curTime") Date curTime, @Param("flag") int flag);
+
+    /**
+     * 统计指定时间点下，各个涨跌区间内股票的个数
+     * @param avlDate
+     * @return
+     */
+    List<Map> getStockUpdownSectionByTime(@Param("avlDate") Date avlDate);
 }

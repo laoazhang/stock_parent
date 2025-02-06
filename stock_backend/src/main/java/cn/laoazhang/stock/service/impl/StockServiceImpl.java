@@ -217,4 +217,40 @@ public class StockServiceImpl implements StockService {
         //5.返回数据
         return R.ok(info);
     }
+
+    /**
+     * 功能描述：统计在当前时间下（精确到分钟），股票在各个涨跌区间的数量
+     *  如果当前不在股票有效时间内，则以最近的一个有效股票交易时间作为查询时间点；
+     * @return
+     *  响应数据格式：
+     *  {
+     *     "code": 1,
+     *     "data": {
+     *         "time": "2021-12-31 14:58:00",
+     *         "infos": [
+     *             {
+     *                 "count": 17,
+     *                 "title": "-3~0%"
+     *             },
+     *             //...
+     *             ]
+     *     }
+     */
+    @Override
+    public R<Map> stockUpDownScopeCount() {
+        //1.获取股票最新一次交易的时间点
+        Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+        //mock data
+        curDate=DateTime.parse("2022-01-06 09:55:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //2.查询股票信息
+        List<Map> maps = stockRtInfoMapper.getStockUpdownSectionByTime(curDate);
+        //3.组装数据
+        HashMap<String,Object> mapInfo = new HashMap<>();
+        //获取指定日期格式的字符串
+        String curDateStr = new DateTime(curDate).toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        mapInfo.put("time",curDateStr);
+        mapInfo.put("infos",maps);
+        //4.返回数据
+        return R.ok(mapInfo);
+    }
 }

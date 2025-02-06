@@ -93,4 +93,15 @@ public class StockController {
     public R<Map> stockTradeVol4InnerMarket() {
         return stockService.stockTradeVol4InnerMarket();
     }
+
+    /**
+     * 查询当前时间下股票的涨跌幅度区间统计功能
+     * 如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询点
+     * @return
+     */
+    @GetMapping("/stock/updown")
+    @ApiOperation(value = "查询当前时间下股票的涨跌幅度区间统计功能",notes = "查询当前时间下股票的涨跌幅度区间统计功能",response = R.class)
+    public R<Map> getStockUpDown() {
+        return stockService.stockUpDownScopeCount();
+    }
 }
