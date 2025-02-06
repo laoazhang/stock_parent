@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author : laoazhang
@@ -244,12 +245,45 @@ public class StockServiceImpl implements StockService {
         curDate=DateTime.parse("2022-01-06 09:55:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.查询股票信息
         List<Map> maps = stockRtInfoMapper.getStockUpdownSectionByTime(curDate);
+        //2.1 获取有序的标题集合
+        List<String> orderSections = stockInfoConfig.getUpDownRange();
+        //思路：利用List集合的属性，然后顺序编译，找出每个标题对应的map，然后维护到一个新的List集合下即可
+//        List<Map> orderMaps =new ArrayList<>();
+//        for (String title : orderSections) {
+//            Map map=null;
+//            for (Map m : maps) {
+//                if (m.containsValue(title)) {
+//                    map=m;
+//                    break;
+//                }
+//            }
+//            if (map==null) {
+//                map=new HashMap();
+//                map.put("count",0);
+//                map.put("title",title);
+//            }
+//            orderMaps.add(map);
+//        }
+        //方式2：使用lambda表达式指定
+        List<Map> orderMaps = orderSections.stream().map(title -> {
+            Map mp = null;
+            Optional<Map> op = maps.stream().filter(m -> m.containsValue(title)).findFirst();
+            //判断是否存在符合过滤条件的元素
+            if (op.isPresent()) {
+                mp = op.get();
+            } else {
+                mp = new HashMap();
+                mp.put("count", 0);
+                mp.put("title", title);
+            }
+            return mp;
+        }).collect(Collectors.toList());
         //3.组装数据
         HashMap<String,Object> mapInfo = new HashMap<>();
         //获取指定日期格式的字符串
         String curDateStr = new DateTime(curDate).toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
         mapInfo.put("time",curDateStr);
-        mapInfo.put("infos",maps);
+        mapInfo.put("infos",orderMaps);
         //4.返回数据
         return R.ok(mapInfo);
     }
