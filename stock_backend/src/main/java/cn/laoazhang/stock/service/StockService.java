@@ -1,6 +1,7 @@
 package cn.laoazhang.stock.service;
 
 import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
+import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
 import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
@@ -60,4 +61,12 @@ public interface StockService {
      * @return
      */
     R<Map> stockUpDownScopeCount();
+
+    /**
+     * 功能描述：查询单个个股的分时行情数据，也就是统计指定股票T日每分钟的交易数据；
+     *         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点
+     * @param code 股票编码
+     * @return
+     */
+    R<List<Stock4MinuteDomain>> stockScreenTimeSharing(String code);
 }

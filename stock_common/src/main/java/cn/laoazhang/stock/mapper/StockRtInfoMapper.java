@@ -1,5 +1,6 @@
 package cn.laoazhang.stock.mapper;
 
+import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.MapKey;
@@ -53,4 +54,16 @@ public interface StockRtInfoMapper {
      * @return
      */
     List<Map> getStockUpdownSectionByTime(@Param("avlDate") Date avlDate);
+
+    /**
+     * 根据时间范围查询指定股票的交易流水
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4MinuteDomain> getStockInfoByCodeAndDate(@Param("stockCode") String stockCode,
+                                                       @Param("startTime") Date startTime,
+                                                       @Param("endTime") Date endTime);
+
 }
