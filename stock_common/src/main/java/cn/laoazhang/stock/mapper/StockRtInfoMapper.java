@@ -77,4 +77,23 @@ public interface StockRtInfoMapper {
     List<Stock4EvrDayDomain> getStockInfo4EvrDay(@Param("stockCode") String stockCode,
                                                  @Param("startTime") Date startTime,
                                                  @Param("endTime") Date endTime);
+    /**
+     * 查询指定日期范围内指定股票的最大日期
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Date> getStockInfo4EvrDayDate(@Param("stockCode") String stockCode,
+                                                 @Param("startTime") Date startTime,
+                                                 @Param("endTime") Date endTime);
+
+    /**
+     * 查询指定日期范围内指定股票每天的交易数据
+     * @param stockCode 股票code
+     * @param dateList 日期列表
+     * @return
+     */
+    List<Stock4EvrDayDomain> getStockInfo4EvrDayData(@Param("stockCode") String stockCode,
+                                                     @Param("dateList") List<Date> dateList);
 }
