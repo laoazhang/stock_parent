@@ -1,9 +1,6 @@
 package cn.laoazhang.stock.controller;
 
-import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
-import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
-import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
-import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
+import cn.laoazhang.stock.pojo.domain.*;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.vo.resp.PageResult;
@@ -116,5 +113,15 @@ public class StockController {
     @ApiOperation(value = "查询单个个股的分时行情数据",notes = "查询单个个股的分时行情数据",response = R.class)
     public R<List<Stock4MinuteDomain>> stockScreenTimeSharing(String code) {
         return stockService.stockScreenTimeSharing(code);
+    }
+
+    /**
+     * 单个个股日K 数据查询 ，可以根据时间区间查询数日的K线数据
+     * @param stockCode 股票编码
+     */
+    @RequestMapping("/stock/screen/dkline")
+    @ApiOperation(value = "单个个股日K 数据查询",notes = "单个个股日K 数据查询",response = R.class)
+    public R<List<Stock4EvrDayDomain>> getDayKLinData(@RequestParam("code") String stockCode){
+        return stockService.getDayKLinData(stockCode);
     }
 }

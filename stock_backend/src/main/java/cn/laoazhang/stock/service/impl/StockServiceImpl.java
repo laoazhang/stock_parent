@@ -4,10 +4,7 @@ import cn.laoazhang.stock.mapper.StockBlockRtInfoMapper;
 import cn.laoazhang.stock.mapper.StockBusinessMapper;
 import cn.laoazhang.stock.mapper.StockMarketIndexInfoMapper;
 import cn.laoazhang.stock.mapper.StockRtInfoMapper;
-import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
-import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
-import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
-import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
+import cn.laoazhang.stock.pojo.domain.*;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.utils.DateTimeUtil;
@@ -321,5 +318,30 @@ public class StockServiceImpl implements StockService {
         }
         //3.返回数据
         return R.ok(list);
+    }
+
+    /**
+     * 功能描述：单个个股日K数据查询 ，可以根据时间区间查询数日的K线数据
+     * 		默认查询历史20天的数据；
+     * @param stockCode 股票编码
+     * @return
+     */
+    @Override
+    public R<List<Stock4EvrDayDomain>> getDayKLinData(String stockCode) {
+        //1.获取查询的日期范围
+        //1.1 获取截止时间
+        DateTime endDateTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
+        Date endTime = endDateTime.toDate();
+        //TODO mockdata
+        endTime=DateTime.parse("2022-01-07 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //1.2 获取开始时间
+        DateTime startDateTime = endDateTime.minusDays(10);
+        Date startTime = startDateTime.toDate();
+        //TODO mockdata
+        startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //2.调用mapper接口获取查询的集合信息-方案1
+        List<Stock4EvrDayDomain> data = stockRtInfoMapper.getStockInfo4EvrDay(stockCode,startTime,endTime);
+        //3.组装数据，响应
+        return R.ok(data);
     }
 }

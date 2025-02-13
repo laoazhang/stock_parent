@@ -1,9 +1,6 @@
 package cn.laoazhang.stock.service;
 
-import cn.laoazhang.stock.pojo.domain.InnerMarketDomain;
-import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
-import cn.laoazhang.stock.pojo.domain.StockBlockDomain;
-import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
+import cn.laoazhang.stock.pojo.domain.*;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
@@ -69,4 +66,10 @@ public interface StockService {
      * @return
      */
     R<List<Stock4MinuteDomain>> stockScreenTimeSharing(String code);
+
+    /**
+     * 单个个股日K 数据查询 ，可以根据时间区间查询数日的K线数据
+     * @param stockCode 股票编码
+     */
+    R<List<Stock4EvrDayDomain>> getDayKLinData(String stockCode);
 }
