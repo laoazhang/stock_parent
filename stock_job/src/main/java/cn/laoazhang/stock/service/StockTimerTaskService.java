@@ -1,0 +1,14 @@
+package cn.laoazhang.stock.service;
+
+/**
+ * @author : laoazhang
+ * @date : 2025/02/14 23:02
+ * @description : 定义采集股票数据的定时任务的服务接口
+ */
+public interface StockTimerTaskService {
+
+    /**
+     * 获取国内大盘的实时数据信息
+     */
+    void getInnerMarketInfo();
+}
