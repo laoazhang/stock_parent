@@ -111,15 +111,15 @@
     </insert>
     <insert id="insertBatch">
         insert into stock_market_index_info
-        ( id,mark_Id,cur_time
-        ,mark_name,cur_point,current_price
-        ,updown_rate,trade_account,trade_volume
+        ( id,market_code,cur_time
+        ,market_name,pre_close_point,open_point,cur_point,min_point,max_point,trade_amount,trade_volume
         )
         values
         <foreach collection="list" item="smi" separator=",">
-            (#{smi.id,jdbcType=BIGINT},#{smi.markId,jdbcType=CHAR},#{smi.curTime,jdbcType=TIMESTAMP}
-            ,#{smi.markName,jdbcType=VARCHAR},#{smi.curPoint,jdbcType=DECIMAL},#{smi.currentPrice,jdbcType=DECIMAL}
-            ,#{smi.updownRate,jdbcType=DECIMAL},#{smi.tradeAccount,jdbcType=BIGINT},#{smi.tradeVolume,jdbcType=BIGINT}
+            (#{smi.id,jdbcType=BIGINT},#{smi.marketCode,jdbcType=CHAR},#{smi.curTime,jdbcType=TIMESTAMP}
+            ,#{smi.marketName,jdbcType=VARCHAR},#{smi.preClosePoint,jdbcType=DECIMAL},#{smi.openPoint,jdbcType=DECIMAL},
+            #{smi.curPoint,jdbcType=DECIMAL},#{smi.minPoint,jdbcType=DECIMAL},#{smi.maxPoint,jdbcType=DECIMAL},
+            #{smi.tradeAmount,jdbcType=BIGINT},#{smi.tradeVolume,jdbcType=BIGINT}
             )
         </foreach>
     </insert>
