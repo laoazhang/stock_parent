@@ -14,6 +14,7 @@ import cn.laoazhang.stock.utils.ParserStockInfoUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.C;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +61,11 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+
 
     @Override
     public void getInnerMarketInfo() {
@@ -136,6 +142,8 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
         //批量插入
         int count = this.stockMarketIndexInfoMapper.insertBatch(list);
         log.info("批量插入了：{}条数据",count);
+        //通知后台终端刷新本地缓存，发送的日期数据是告知对方当前更新的股票数据所在时间点
+        rabbitTemplate.convertAndSend("stockExchange","inner.market",new Date());
     }
 
     /**
@@ -166,5 +174,7 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
             log.info("数据量：{}",infos.size());
             stockRtInfoMapper.insertBatch(infos);
         });
+
+
     }
 }

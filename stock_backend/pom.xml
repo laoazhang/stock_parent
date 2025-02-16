@@ -18,6 +18,16 @@
     </properties>
 
     <dependencies>
+        <!-- caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <!-- AMQP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--引入公共依赖-->
         <dependency>
             <groupId>cn.laoazhang.stock</groupId>

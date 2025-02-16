@@ -72,4 +72,5 @@ public interface StockService {
      * @param stockCode 股票编码
      */
     R<List<Stock4EvrDayDomain>> getDayKLinData(String stockCode);
+
 }
