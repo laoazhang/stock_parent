@@ -1,5 +1,6 @@
 package cn.laoazhang.stock;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -162,5 +164,17 @@ public class TestRestTemplate {
         String resStr = result.getBody();
         System.out.println(resStr);
         System.out.println(cookies);
+    }
+
+    @Test
+    public void testPartion() {
+        List<Integer> all=new ArrayList<>();
+        for (int i = 1; i <= 50; i++) {
+            all.add(i);
+        }
+        //将集合均等分，每份大小最多15个
+        Lists.partition(all,15).forEach(ids->{
+            System.out.println(ids);
+        });
     }
 }

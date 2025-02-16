@@ -2,6 +2,7 @@ package cn.laoazhang.stock.config;
 
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.utils.IdWorker;
+import cn.laoazhang.stock.utils.ParserStockInfoUtil;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +26,15 @@ public class CommonConfig {
     public IdWorker idWorker(){
         //指定当前为1号机房的2号机器生成
         return new IdWorker(2L,1L);
+    }
+
+    /**
+     * 配置解析工具bean
+     * @param idWorker
+     * @return
+     */
+    @Bean
+    public ParserStockInfoUtil parserStockInfoUtil(IdWorker idWorker){
+        return new ParserStockInfoUtil(idWorker);
     }
 }

@@ -25,4 +25,12 @@ public class TestStockTimerService {
         stockTimerService.getInnerMarketInfo();
     }
 
+    /**
+     * 获取个股数据
+     */
+    @Test
+    public void test02(){
+        stockTimerService.getStockRtIndex();
+    }
+
 }

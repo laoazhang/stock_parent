@@ -1,12 +1,19 @@
 package cn.laoazhang.stock.service.impl;
 
+import cn.laoazhang.stock.constant.ParseType;
+import cn.laoazhang.stock.mapper.StockBusinessMapper;
 import cn.laoazhang.stock.mapper.StockMarketIndexInfoMapper;
+import cn.laoazhang.stock.mapper.StockRtInfoMapper;
 import cn.laoazhang.stock.pojo.entity.StockMarketIndexInfo;
+import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.service.StockTimerTaskService;
 import cn.laoazhang.stock.utils.DateTimeUtil;
 import cn.laoazhang.stock.utils.IdWorker;
+import cn.laoazhang.stock.utils.ParserStockInfoUtil;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,8 +24,10 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author : laoazhang
@@ -41,6 +50,16 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Autowired
     private StockMarketIndexInfoMapper stockMarketIndexInfoMapper;
+
+    //注入格式解析bean
+    @Autowired
+    private ParserStockInfoUtil parserStockInfoUtil;
+
+    @Autowired
+    private StockBusinessMapper stockBusinessMapper;
+
+    @Autowired
+    private StockRtInfoMapper stockRtInfoMapper;
 
     @Override
     public void getInnerMarketInfo() {
@@ -117,5 +136,35 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
         //批量插入
         int count = this.stockMarketIndexInfoMapper.insertBatch(list);
         log.info("批量插入了：{}条数据",count);
+    }
+
+    /**
+     * 批量获取股票分时数据详情信息
+     * https://hq.sinajs.cn/list=sz000002,sh600015
+     */
+    @Override
+    public void getStockRtIndex() {
+        //批量获取股票ID集合
+        List<String> stockIds = stockBusinessMapper.getStockIds();
+        //计算出符合sina命名规范的股票id数据
+        stockIds = stockIds.stream().map(id -> {
+            return id.startsWith("6") ? "sh" + id : "sz" + id;
+        }).collect(Collectors.toList());
+        //设置公共请求头对象
+        //设置请求头数据
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Referer","https://finance.sina.com.cn/stock/");
+        headers.add("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        //一次性查询过多，我们将需要查询的数据先进行分片处理，每次最多查询20条股票数据
+        Lists.partition(stockIds,20).forEach(list ->{
+            //拼接股票url地址
+            String stockUrl = stockInfoConfig.getMarketUrl() + String.join(",", list);
+            //获取响应数据
+            String result = restTemplate.postForObject(stockUrl,entity,String.class);
+            List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
+            log.info("数据量：{}",infos.size());
+            stockRtInfoMapper.insertBatch(infos);
+        });
     }
 }
