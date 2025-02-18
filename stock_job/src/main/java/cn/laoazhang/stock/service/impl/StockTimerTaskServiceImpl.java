@@ -1,9 +1,11 @@
 package cn.laoazhang.stock.service.impl;
 
 import cn.laoazhang.stock.constant.ParseType;
+import cn.laoazhang.stock.mapper.StockBlockRtInfoMapper;
 import cn.laoazhang.stock.mapper.StockBusinessMapper;
 import cn.laoazhang.stock.mapper.StockMarketIndexInfoMapper;
 import cn.laoazhang.stock.mapper.StockRtInfoMapper;
+import cn.laoazhang.stock.pojo.entity.StockBlockRtInfo;
 import cn.laoazhang.stock.pojo.entity.StockMarketIndexInfo;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
@@ -18,6 +20,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
@@ -63,9 +66,16 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
     private StockRtInfoMapper stockRtInfoMapper;
 
     @Autowired
+    private StockBlockRtInfoMapper stockBlockRtInfoMapper;
+
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
-
+    /**
+     * 注入线程池对象
+     */
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override
     public void getInnerMarketInfo() {
@@ -166,15 +176,36 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         //一次性查询过多，我们将需要查询的数据先进行分片处理，每次最多查询20条股票数据
         Lists.partition(stockIds,20).forEach(list ->{
-            //拼接股票url地址
-            String stockUrl = stockInfoConfig.getMarketUrl() + String.join(",", list);
-            //获取响应数据
-            String result = restTemplate.postForObject(stockUrl,entity,String.class);
-            List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
-            log.info("数据量：{}",infos.size());
-            stockRtInfoMapper.insertBatch(infos);
+            //每个分片的数据开启一个线程异步执行任务
+            threadPoolTaskExecutor.execute(()->{
+                //拼接股票url地址
+                String stockUrl = stockInfoConfig.getMarketUrl() + String.join(",", list);
+                //获取响应数据
+                String result = restTemplate.postForObject(stockUrl,entity,String.class);
+                List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
+                log.info("数据量：{}",infos.size());
+                stockRtInfoMapper.insertBatch(infos);
+            });
         });
+    }
 
-
+    /**
+     * 获取板块实时数据
+     * http://vip.stock.finance.sina.com.cn/q/view/newSinaHy.php
+     */
+    @Override
+    public void getStockSectorRtIndex() {
+        //发送板块数据请求
+        String result = restTemplate.getForObject(stockInfoConfig.getBlockUrl(), String.class);
+        //响应结果转板块集合数据
+        List<StockBlockRtInfo> infos = parserStockInfoUtil.parse4StockBlock(result);
+        log.info("板块数据量：{}",infos.size());
+        //数据分片保存到数据库下 行业板块类目大概50个，可每小时查询一次即可
+        Lists.partition(infos,20).forEach(list->{
+            threadPoolTaskExecutor.execute(()->{
+                //20个一组，批量插入
+                stockBlockRtInfoMapper.insertBatch(list);
+            });
+        });
     }
 }

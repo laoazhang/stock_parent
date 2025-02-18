@@ -84,6 +84,18 @@
                 <if test="curTime != null">#{curTime,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
+    <insert id="insertBatch">
+        insert into stock_block_rt_info
+        ( id,label,cur_time,block_name
+        ,company_num,avg_price,updown_rate
+        ,trade_amount,trade_volume)
+        values
+        <foreach collection="list" item="si" separator=",">
+            (#{si.id,jdbcType=BIGINT},#{si.label,jdbcType=VARCHAR},#{si.curTime,jdbcType=TIMESTAMP}
+            ,#{si.blockName,jdbcType=VARCHAR},#{si.companyNum,jdbcType=INTEGER},#{si.avgPrice,jdbcType=DECIMAL}
+            ,#{si.updownRate,jdbcType=DECIMAL},#{si.tradeAmount,jdbcType=BIGINT},#{si.tradeVolume,jdbcType=DECIMAL})
+        </foreach>
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.laoazhang.stock.pojo.entity.StockBlockRtInfo">
         update stock_block_rt_info
         <set>

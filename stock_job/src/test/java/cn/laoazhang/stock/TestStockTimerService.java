@@ -33,4 +33,12 @@ public class TestStockTimerService {
         stockTimerService.getStockRtIndex();
     }
 
+    /**
+     * 获取板块数据
+     */
+    @Test
+    public void test03(){
+        stockTimerService.getStockSectorRtIndex();
+    }
+
 }
