@@ -1,6 +1,7 @@
 package cn.laoazhang.stock.service;
 
 import cn.laoazhang.stock.pojo.domain.*;
+import cn.laoazhang.stock.pojo.entity.StockOuterMarketIndexInfo;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
@@ -73,4 +74,9 @@ public interface StockService {
      */
     R<List<Stock4EvrDayDomain>> getDayKLinData(String stockCode);
 
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    R<List<OuterMarketDomain>> outerIndexAll();
 }

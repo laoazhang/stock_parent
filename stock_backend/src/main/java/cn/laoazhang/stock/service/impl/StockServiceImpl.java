@@ -1,9 +1,6 @@
 package cn.laoazhang.stock.service.impl;
 
-import cn.laoazhang.stock.mapper.StockBlockRtInfoMapper;
-import cn.laoazhang.stock.mapper.StockBusinessMapper;
-import cn.laoazhang.stock.mapper.StockMarketIndexInfoMapper;
-import cn.laoazhang.stock.mapper.StockRtInfoMapper;
+import cn.laoazhang.stock.mapper.*;
 import cn.laoazhang.stock.pojo.domain.*;
 import cn.laoazhang.stock.pojo.vo.StockInfoConfig;
 import cn.laoazhang.stock.service.StockService;
@@ -48,6 +45,9 @@ public class StockServiceImpl implements StockService {
 
     @Autowired
     private Cache<String,Object> caffeineCache;
+
+    @Autowired
+    private StockOuterMarketIndexInfoMapper stockOuterMarketIndexInfoMapper;
 
     /**
      * 获取国内大盘的实时数据
@@ -355,5 +355,20 @@ public class StockServiceImpl implements StockService {
         List<Stock4EvrDayDomain> data = stockRtInfoMapper.getStockInfo4EvrDayData(stockCode,dateList);
         //3.组装数据，响应
         return R.ok(data);
+    }
+
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    @Override
+    public R<List<OuterMarketDomain>> outerIndexAll() {
+        //1.调用mapper接口获取数据
+        List<OuterMarketDomain> infos = stockOuterMarketIndexInfoMapper.sectorAllLimit();
+        //2.组装数据
+        if (CollectionUtils.isEmpty(infos)) {
+            return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
+        }
+        return R.ok(infos);
     }
 }

@@ -1,6 +1,9 @@
 package cn.laoazhang.stock.mapper;
 
+import cn.laoazhang.stock.pojo.domain.OuterMarketDomain;
 import cn.laoazhang.stock.pojo.entity.StockOuterMarketIndexInfo;
+
+import java.util.List;
 
 /**
 * @author laoazhang
@@ -22,4 +25,5 @@ public interface StockOuterMarketIndexInfoMapper {
 
     int updateByPrimaryKey(StockOuterMarketIndexInfo record);
 
+    List<OuterMarketDomain> sectorAllLimit();
 }

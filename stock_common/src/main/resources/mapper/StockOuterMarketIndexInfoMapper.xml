@@ -26,6 +26,17 @@
         from stock_outer_market_index_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="sectorAllLimit" resultType="cn.laoazhang.stock.pojo.domain.OuterMarketDomain">
+        select
+            sbr.market_name as name,
+            sbr.cur_point   as curPoint,
+            sbr.updown      as updown,
+            sbr.rose        as rose,
+            sbr.cur_time    as curTime
+        from stock_outer_market_index_info as sbr
+        order by sbr.cur_point, sbr.cur_time desc
+            limit 4
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_outer_market_index_info

@@ -1,6 +1,7 @@
 package cn.laoazhang.stock.controller;
 
 import cn.laoazhang.stock.pojo.domain.*;
+import cn.laoazhang.stock.pojo.entity.StockOuterMarketIndexInfo;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.vo.resp.PageResult;
@@ -123,5 +124,15 @@ public class StockController {
     @ApiOperation(value = "单个个股日K 数据查询",notes = "单个个股日K 数据查询",response = R.class)
     public R<List<Stock4EvrDayDomain>> getDayKLinData(@RequestParam("code") String stockCode){
         return stockService.getDayKLinData(stockCode);
+    }
+
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    @GetMapping("/external/index")
+    @ApiOperation(value = "外盘指数行情数据查询，根据时间和大盘点数降序排序取前4",notes = "外盘指数行情数据查询，根据时间和大盘点数降序排序取前4",response = R.class)
+    public R<List<OuterMarketDomain>> outerIndexAll() {
+        return stockService.outerIndexAll();
     }
 }
