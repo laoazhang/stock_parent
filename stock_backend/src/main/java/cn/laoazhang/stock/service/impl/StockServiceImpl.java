@@ -371,4 +371,19 @@ public class StockServiceImpl implements StockService {
         }
         return R.ok(infos);
     }
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param code
+     * @return
+     */
+    @Override
+    public R<List<StockRtSearchDomain>> searchAll(String code) {
+        List<StockRtSearchDomain> list = stockRtInfoMapper.searchAll(code);
+        if (CollectionUtils.isEmpty(list)) {
+            return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
+        }
+        return R.ok(list);
+
+    }
 }

@@ -161,6 +161,13 @@
           and sri2.stock_code=#{stockCode}
         order by sri2.cur_time
     </select>
+    <select id="searchAll" resultType="cn.laoazhang.stock.pojo.domain.StockRtSearchDomain">
+        select
+            sri.stock_code as code,
+            sri.stock_name as name
+        from stock_rt_info as sri
+        where sri.stock_code like concat('%',#{code},'%')
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

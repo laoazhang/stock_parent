@@ -9,10 +9,7 @@ import cn.laoazhang.stock.vo.resp.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -135,4 +132,16 @@ public class StockController {
     public R<List<OuterMarketDomain>> outerIndexAll() {
         return stockService.outerIndexAll();
     }
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param code
+     * @return
+     */
+    @GetMapping("/stock/search")
+    @ApiOperation(value = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称",notes = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称",response = R.class)
+    public R<List<StockRtSearchDomain>> searchAll(@RequestParam("code") String code) {
+        return stockService.searchAll(code);
+    }
+
 }

@@ -2,6 +2,7 @@ package cn.laoazhang.stock.mapper;
 
 import cn.laoazhang.stock.pojo.domain.Stock4EvrDayDomain;
 import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
+import cn.laoazhang.stock.pojo.domain.StockRtSearchDomain;
 import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.MapKey;
@@ -102,4 +103,11 @@ public interface StockRtInfoMapper {
      * @param stockRtInfoList
      */
     int insertBatch(List<StockRtInfo> stockRtInfoList);
+
+    /**
+     * 根据股票代码模糊查询股票信息
+     * @param code
+     * @return
+     */
+    List<StockRtSearchDomain> searchAll(@Param("code") String code);
 }
