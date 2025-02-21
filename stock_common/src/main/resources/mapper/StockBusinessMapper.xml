@@ -30,6 +30,12 @@
         from stock_business
         where 1=1
     </select>
+    <select id="searchBusiness" resultType="cn.laoazhang.stock.pojo.domain.StockBusinessDomain">
+        select stock_code as code,block_name as trade,
+               business,stock_name as name
+        from stock_business
+        where stock_code = #{code,jdbcType=VARCHAR}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_business

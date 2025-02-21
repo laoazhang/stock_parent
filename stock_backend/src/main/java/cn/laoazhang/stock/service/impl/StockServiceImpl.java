@@ -386,4 +386,18 @@ public class StockServiceImpl implements StockService {
         return R.ok(list);
 
     }
+
+    /**
+     * 个股主营业务查询接口
+     * @param code
+     * @return
+     */
+    @Override
+    public R<List<StockBusinessDomain>> searchBusiness(String code) {
+        List<StockBusinessDomain> list = stockBusinessMapper.searchBusiness(code);
+        if (CollectionUtils.isEmpty(list)) {
+            return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
+        }
+        return R.ok(list);
+    }
 }

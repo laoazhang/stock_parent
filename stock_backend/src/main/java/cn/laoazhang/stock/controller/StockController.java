@@ -144,4 +144,16 @@ public class StockController {
         return stockService.searchAll(code);
     }
 
+    /**
+     * 个股主营业务查询接口
+     * @param code
+     * @return
+     */
+    @GetMapping("/stock/describe")
+    @ApiOperation(value = "个股主营业务查询接口",notes = "个股主营业务查询接口",response = R.class)
+    public R<List<StockBusinessDomain>> searchBusiness(@RequestParam("code") String code) {
+        return stockService.searchBusiness(code);
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package cn.laoazhang.stock.mapper;
 
+import cn.laoazhang.stock.pojo.domain.StockBusinessDomain;
 import cn.laoazhang.stock.pojo.entity.StockBusiness;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,4 +27,6 @@ public interface StockBusinessMapper {
     int updateByPrimaryKey(StockBusiness record);
 
     List<String> getStockIds();
+
+    List<StockBusinessDomain> searchBusiness(@Param("code") String code);
 }

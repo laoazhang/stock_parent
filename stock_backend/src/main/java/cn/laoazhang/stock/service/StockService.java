@@ -86,4 +86,11 @@ public interface StockService {
      * @return
      */
     R<List<StockRtSearchDomain>> searchAll(String code);
+
+    /**
+     * 个股主营业务查询接口
+     * @param code
+     * @return
+     */
+    R<List<StockBusinessDomain>> searchBusiness(String code);
 }
