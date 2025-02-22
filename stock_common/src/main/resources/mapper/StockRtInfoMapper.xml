@@ -168,6 +168,18 @@
         from stock_rt_info as sri
         where sri.stock_code like concat('%',#{code},'%')
     </select>
+    <select id="getStockInfo4EvrWeek" resultType="cn.laoazhang.stock.pojo.domain.Stock4EvrWeekDomain">
+        select
+            #{stockCode} as stockCode,
+            max(sri.max_price) as maxPrice,
+            min(sri.min_price) as minPrice,
+            (select open_price from stock_rt_info where stock_code = #{stockCode} and cur_time between #{startTime} and #{endTime} order by cur_time limit 1) as openPrice,
+        (select cur_price from stock_rt_info where stock_code = #{stockCode} and cur_time between #{startTime} and #{endTime} order by cur_time desc limit 1) as closePrice,
+            avg(sri.cur_price) as avgPrice,
+            (select max(cur_time) from stock_rt_info where stock_code = #{stockCode} and cur_time between #{startTime} and #{endTime}) as mxTime
+        from stock_rt_info sri
+        where sri.stock_code = #{stockCode} and sri.cur_time between #{startTime} and #{endTime}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

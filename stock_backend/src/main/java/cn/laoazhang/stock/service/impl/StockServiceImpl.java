@@ -12,6 +12,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -399,5 +400,31 @@ public class StockServiceImpl implements StockService {
             return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
         }
         return R.ok(list);
+    }
+
+    /**
+     * 单个个股周K 数据查询 ，可以根据时间区间查询一周的K线数据
+     * @param stockCode 股票编码
+     */
+    @Override
+    public R<List<Stock4EvrWeekDomain>> getWeekKLinData(String stockCode) {
+        //1.获取查询的日期范围
+        //1.1 获取截止时间
+        DateTime endDateTime = DateTime.now().withDayOfWeek(DateTimeConstants.FRIDAY);
+        Date endTime = endDateTime.toDate();
+        //TODO mockdata
+        endTime=DateTime.parse("2022-01-08 00:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //1.2 获取开始时间
+        DateTime startDateTime = endDateTime.minusDays(4); // Monday
+        Date startTime = startDateTime.toDate();
+        //TODO mockdata
+        startTime=DateTime.parse("2022-01-03 00:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        //2.调用mapper接口获取查询的集合信息
+        List<Stock4EvrWeekDomain> data = stockRtInfoMapper.getStockInfo4EvrWeek(stockCode,startTime,endTime);
+        if (CollectionUtils.isEmpty(data)) {
+            return R.error(ResponseCode.NO_RESPONSE_DATA.getMessage());
+        }
+        //3.组装数据，响应
+        return R.ok(data);
     }
 }

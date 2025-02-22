@@ -1,8 +1,6 @@
 package cn.laoazhang.stock.controller;
 
 import cn.laoazhang.stock.pojo.domain.*;
-import cn.laoazhang.stock.pojo.entity.StockOuterMarketIndexInfo;
-import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import cn.laoazhang.stock.service.StockService;
 import cn.laoazhang.stock.vo.resp.PageResult;
 import cn.laoazhang.stock.vo.resp.R;
@@ -155,5 +153,14 @@ public class StockController {
         return stockService.searchBusiness(code);
     }
 
+    /**
+     * 单个个股周K 数据查询 ，可以根据时间区间查询一周的K线数据
+     * @param stockCode 股票编码
+     */
+    @RequestMapping("/stock/screen/weekkline")
+    @ApiOperation(value = "单个个股周K 数据查询",notes = "单个个股周K 数据查询",response = R.class)
+    public R<List<Stock4EvrWeekDomain>> getWeekKLinData(@RequestParam("stockCode") String stockCode){
+        return stockService.getWeekKLinData(stockCode);
+    }
 
 }

@@ -1,9 +1,6 @@
 package cn.laoazhang.stock.mapper;
 
-import cn.laoazhang.stock.pojo.domain.Stock4EvrDayDomain;
-import cn.laoazhang.stock.pojo.domain.Stock4MinuteDomain;
-import cn.laoazhang.stock.pojo.domain.StockRtSearchDomain;
-import cn.laoazhang.stock.pojo.domain.StockUpdownDomain;
+import cn.laoazhang.stock.pojo.domain.*;
 import cn.laoazhang.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
@@ -110,4 +107,15 @@ public interface StockRtInfoMapper {
      * @return
      */
     List<StockRtSearchDomain> searchAll(@Param("code") String code);
+
+    /**
+     * 查询指定股票每周的交易数据
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4EvrWeekDomain> getStockInfo4EvrWeek(@Param("stockCode") String stockCode,
+                                                  @Param("startTime") Date startTime,
+                                                  @Param("endTime") Date endTime);
 }

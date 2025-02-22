@@ -93,4 +93,11 @@ public interface StockService {
      * @return
      */
     R<List<StockBusinessDomain>> searchBusiness(String code);
+
+    /**
+     * 单个个股周K 数据查询 ，可以根据时间区间查询一周的K线数据
+     * @param stockCode 股票编码
+     */
+    R<List<Stock4EvrWeekDomain>> getWeekKLinData(String stockCode);
+
 }
