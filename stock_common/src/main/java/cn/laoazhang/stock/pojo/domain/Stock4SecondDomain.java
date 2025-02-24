@@ -1,6 +1,5 @@
 package cn.laoazhang.stock.pojo.domain;
 
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,27 +12,18 @@ import java.util.Date;
 /**
  * @author : laoazhang
  * @date : 2025/02/12 22:36
- * @description : 个股分时(minute)数据封装
+ * @description : 个股分时(second)数据封装
  */
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Stock4MinuteDomain {
-    /**
-     * 日期，eg:202201280809
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Shanghai")
-    private Date date;
+public class Stock4SecondDomain {
     /**
      * 交易量
      */
     private Long tradeAmt;
-    /**
-     * 股票编码
-     */
-    private String code;
     /**
      * 最低价
      */
@@ -43,10 +33,6 @@ public class Stock4MinuteDomain {
      */
     private BigDecimal preClosePrice;
     /**
-     * 股票名称
-     */
-    private String name;
-    /**
      * 最高价
      */
     private BigDecimal highPrice;
@@ -54,7 +40,6 @@ public class Stock4MinuteDomain {
      * 开盘价
      */
     private BigDecimal openPrice;
-
     /**
      * 当前交易总金额
      */
@@ -63,4 +48,9 @@ public class Stock4MinuteDomain {
      * 当前价格
      */
     private BigDecimal tradePrice;
+    /**
+     * 日期，eg:202201280809
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Shanghai")
+    private Date curDate;
 }

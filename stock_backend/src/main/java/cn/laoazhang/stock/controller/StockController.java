@@ -163,4 +163,15 @@ public class StockController {
         return stockService.getWeekKLinData(stockCode);
     }
 
+    /**
+     * 功能描述：查询单个个股的分时(秒)行情数据，也就是统计指定股票T日每分钟的交易数据；
+     *         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点
+     * @param code 股票编码
+     * @return
+     */
+    @GetMapping("/stock/screen/second/detail")
+    @ApiOperation(value = "查询单个个股的分时(second)行情数据",notes = "查询单个个股的分时(second)行情数据",response = R.class)
+    public R<List<Stock4SecondDomain>> stockScreenTimeSecondDetail(String code) {
+        return stockService.stockScreenTimeSecondDetail(code);
+    }
 }

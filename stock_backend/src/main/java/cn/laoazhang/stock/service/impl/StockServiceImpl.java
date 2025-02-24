@@ -427,4 +427,19 @@ public class StockServiceImpl implements StockService {
         //3.组装数据，响应
         return R.ok(data);
     }
+
+    /**
+     * 功能描述：查询单个个股的分时(秒)行情数据，也就是统计指定股票T日每分钟的交易数据；
+     *         如果当前日期不在有效时间内，则以最近的一个股票交易时间作为查询时间点
+     * @param code 股票编码
+     * @return
+     */
+    @Override
+    public R<List<Stock4SecondDomain>> stockScreenTimeSecondDetail(String code) {
+        List<Stock4SecondDomain> list = stockRtInfoMapper.getStockInfoByCodeAndDetail(code);
+        if (CollectionUtils.isEmpty(list)) {
+            list = new ArrayList<>();
+        }
+        return R.ok(list);
+    }
 }

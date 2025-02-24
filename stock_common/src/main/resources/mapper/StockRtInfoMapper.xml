@@ -180,6 +180,21 @@
         from stock_rt_info sri
         where sri.stock_code = #{stockCode} and sri.cur_time between #{startTime} and #{endTime}
     </select>
+    <select id="getStockInfoByCodeAndDetail" resultType="cn.laoazhang.stock.pojo.domain.Stock4SecondDomain">
+        select
+        date_format(sri2.cur_time,'%Y%m%d') as curdate,
+        sri2.trade_amount as tradeAmt,
+        sri2.min_price as lowPrice,
+        sri2.max_price as highPrice,
+        sri2.open_price as openPrice,
+        sri2.trade_volume as tradeVol,
+        sri2.cur_price as tradePrice,
+        sri2.pre_close_price as preClosePrice
+        from stock_rt_info as sri2
+        where
+        sri2.stock_code=#{stockCode}
+        order by sri2.cur_time desc limit 1
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

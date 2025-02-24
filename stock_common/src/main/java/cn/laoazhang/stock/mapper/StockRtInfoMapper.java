@@ -118,4 +118,11 @@ public interface StockRtInfoMapper {
     List<Stock4EvrWeekDomain> getStockInfo4EvrWeek(@Param("stockCode") String stockCode,
                                                   @Param("startTime") Date startTime,
                                                   @Param("endTime") Date endTime);
+
+    /**
+     * 根据时间范围查询指定股票的交易流水信息
+     * @param stockCode 股票code
+     * @return
+     */
+    List<Stock4SecondDomain> getStockInfoByCodeAndDetail(@Param("stockCode") String stockCode);
 }
