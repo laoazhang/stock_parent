@@ -107,4 +107,11 @@ public interface StockService {
      * @return
      */
     R<List<Stock4SecondDomain>> stockScreenTimeSecondDetail(String code);
+
+    /**
+     * 功能描述：个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param code 股票编码
+     * @return
+     */
+    R<List<ScreenSecondDomain>> stockScreenSecond(String code);
 }

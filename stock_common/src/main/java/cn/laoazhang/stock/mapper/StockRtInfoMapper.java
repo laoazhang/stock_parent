@@ -125,4 +125,11 @@ public interface StockRtInfoMapper {
      * @return
      */
     List<Stock4SecondDomain> getStockInfoByCodeAndDetail(@Param("stockCode") String stockCode);
+
+    /**
+     * 查询指定股票的交易流水信息降序10条
+     * @param stockCode 股票code
+     * @return
+     */
+    List<ScreenSecondDomain> stockScreenSecond(@Param("stockCode") String stockCode);
 }
