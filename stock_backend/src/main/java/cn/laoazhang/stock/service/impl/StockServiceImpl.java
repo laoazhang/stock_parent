@@ -442,4 +442,14 @@ public class StockServiceImpl implements StockService {
         }
         return R.ok(list);
     }
+
+
+    @Override
+    public R<List<ScreenSecondDomain>> stockScreenSecond(String code) {
+        List<ScreenSecondDomain> list = stockRtInfoMapper.stockScreenSecond(code);
+        if (CollectionUtils.isEmpty(list)) {
+            list = new ArrayList<>();
+        }
+        return R.ok(list);
+    }
 }
