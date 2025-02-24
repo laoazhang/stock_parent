@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @author : laoazhang
  * @date : 2025/02/12 22:36
- * @description : 个股分时(second)数据封装
+ * @description : 个股分时(秒)数据封装
  */
 
 @Data
