@@ -1,6 +1,5 @@
 package cn.laoazhang.stock.pojo.domain;
 
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

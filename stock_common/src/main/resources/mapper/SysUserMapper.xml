@@ -42,6 +42,13 @@
         from sys_user
         where username = #{userName}
     </select>
+    <select id="getUserPermission" resultType="cn.laoazhang.stock.pojo.domain.SysPermissionDomain">
+        select sp.id, sp.title, sp.icon, sp.url, sp.name,sp.type
+        from sys_permission sp
+                 join sys_role_permission srp on srp.permission_id = sp.id
+                 join sys_user_role sur on sur.role_id = srp.role_id
+        where sur.user_id = #{userId,jdbcType=BIGINT};
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from sys_user

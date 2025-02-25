@@ -1,8 +1,10 @@
 package cn.laoazhang.stock.mapper;
 
+import cn.laoazhang.stock.pojo.domain.SysPermissionDomain;
 import cn.laoazhang.stock.pojo.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 
 
 /**
@@ -31,4 +33,11 @@ public interface SysUserMapper {
      * @return
      */
     SysUser getUserByUserName(@Param("userName") String userName);
+
+    /**
+     * 根据用户id查询用户权限
+     * @param userId
+     * @return
+     */
+    List<SysPermissionDomain> getUserPermission(@Param("userId") Long userId);
 }

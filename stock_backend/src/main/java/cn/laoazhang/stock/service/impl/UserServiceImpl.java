@@ -4,6 +4,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.laoazhang.stock.constant.StockConstant;
 import cn.laoazhang.stock.mapper.SysUserMapper;
+import cn.laoazhang.stock.pojo.domain.SysPermissionDomain;
 import cn.laoazhang.stock.pojo.entity.SysUser;
 import cn.laoazhang.stock.service.UserService;
 import cn.laoazhang.stock.utils.IdWorker;
@@ -11,7 +12,6 @@ import cn.laoazhang.stock.vo.req.LoginReqVo;
 import cn.laoazhang.stock.vo.resp.LoginRespVo;
 import cn.laoazhang.stock.vo.resp.R;
 import cn.laoazhang.stock.vo.resp.ResponseCode;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -21,9 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author : laoazhang
@@ -90,7 +91,33 @@ public class UserServiceImpl implements UserService {
         LoginRespVo respVo = new LoginRespVo();
         //属性名称与类型必须相同，否则属性值无法copy
         BeanUtils.copyProperties(user, respVo);
+        //6.1查询用户所拥有的权限
+        List<SysPermissionDomain> trees = sysUserMapper.getUserPermission(user.getId());
+        //获取父节点
+        java.util.List<SysPermissionDomain> collect = trees.stream().filter(m -> m.getId() == 0).map(
+                (m) -> {
+                    m.setChildren(getChildrenList(m, trees));
+                    return m;
+                }
+        ).collect(Collectors.toList());
+        respVo.setMenus(collect);
         return R.ok(respVo);
+    }
+
+    /**
+     * 获取子节点列表
+     * @param tree
+     * @param list
+     * @return
+     */
+    public static List<SysPermissionDomain> getChildrenList(SysPermissionDomain tree, List<SysPermissionDomain> list){
+        List<SysPermissionDomain> children = list.stream().filter(item -> Objects.equals(item.getId(), tree.getId())).map(
+                (item) -> {
+                    item.setChildren(getChildrenList(item, list));
+                    return item;
+                }
+        ).collect(Collectors.toList());
+        return children;
     }
 
 

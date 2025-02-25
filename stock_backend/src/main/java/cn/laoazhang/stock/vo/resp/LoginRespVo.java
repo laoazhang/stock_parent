@@ -1,11 +1,15 @@
 package cn.laoazhang.stock.vo.resp;
 
+import cn.laoazhang.stock.pojo.domain.SysPermissionDomain;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @author laoazhang
@@ -34,5 +38,35 @@ public class LoginRespVo {
      * 昵称
      */
     private String nickName;
+
+    /**
+     * 真实姓名
+     */
+    private String realName;
+
+    /**
+     * 性别
+     */
+    private int sex;
+
+    /**
+     * 状态
+     */
+    private int status;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 用户ID
+     */
+    private Long id;
+
+    /**
+     * 侧边栏权限树（不包含按钮权限）
+     */
+    private List<SysPermissionDomain> menus;
 
 }
